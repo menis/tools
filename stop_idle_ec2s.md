@@ -2,7 +2,7 @@
 
 ## Overview
 
-Idle Amazon EC2 instances can be stopped to reduce costs. AWS Lambda, Amazon CloudWatch and Amazon EventBridge [can be used](https://aws.amazon.com/blogs/compute/hibernating-ec2-instances-in-response-to-a-cloudwatch-alarm/) to automatically stop idle instances. Previous solutions placed a high burden on the instance owners. Our solution requires one tag to configure an instance. 
+Idle Amazon EC2 instances can be stopped to reduce costs. AWS Lambda, Amazon CloudWatch and Amazon EventBridge [can be used](https://aws.amazon.com/blogs/compute/hibernating-ec2-instances-in-response-to-a-cloudwatch-alarm/) to automatically stop idle instances. Our solution simplifies instance configuration with a single tag. 
 
 <figure>
 <img src="instance_autostop.png" alt="Instance Autostop"/>
