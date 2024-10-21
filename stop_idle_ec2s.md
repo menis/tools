@@ -16,14 +16,14 @@ Idle Amazon EC2 instances can be stopped to reduce costs. AWS Lambda, Amazon Clo
 
 ## Configuring EC2 Instances for automatic shutdown
 
-To configure your Amazon EC2 Instance to automatically hibernate, attach an AutoShutdown tag. If the solution has not been deployed to your account, follow solution setup instructions before proceeding. 
+To configure your Amazon EC2 Instance to automatically hibernate, attach an AutoShutdown tag. If the solution has not been deployed to your account, follow [solution setup instructions](stop_idle_ec2s.md#deploying-the-solution) before proceeding. 
 
-1. Open the Amazon EC2 console.
-2. In the navigation pane, choose Instances.
+1. Open the [Amazon EC2 console](https://console.aws.amazon.com/ec2).
+2. In the navigation pane, choose **Instances**.
 3. Select an instance to tag by clicking the Instance ID
-4. Select Tags tab
-5. Select Manage tags
-6. Add new tag with key AutoShutdown and Value true
+4. Select **Tags** tab
+5. Select **Manage tags**
+6. **Add new tag** with key `AutoShutdown` and Value `true`
 
 > [!WARNING]
 > Note that an alarms are added to all tagged instances once every hour
@@ -32,7 +32,7 @@ To configure your Amazon EC2 Instance to automatically hibernate, attach an Auto
 
 ### A. Configure permissions with IAM
 
-1. Open the IAM console.
+1. Open the [IAM console](https://console.aws.amazon.com/iam).
 2. In the navigation pane, choose Policies.
 3. Select Create policy.
 4. Switch to JSON view in the Policy editor. Paste the following
