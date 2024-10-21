@@ -8,17 +8,17 @@ Idle Amazon EC2 instances can be stopped to reduce costs. AWS Lambda, Amazon Clo
 <img src="instance_autostop.png" alt="Instance Autostop"/>
 </figure>
 
-1. User adds tag AutoShutdown = 'true' to the instance
+1. User adds tag `AutoShutdown = 'true'` to the instance
 2. Amazon EventBridge Scheduler triggers an AWS Lambda function every 60 min
-3. AWS Lambda checks all instances with the AutoShutdown tag. An Amazon CloudWatch alarm triggered on low CPU utilization is added if one is absent. 
-4. Amazon CloudWatch monitors instance CPU utilization. 
-5. If CPU utilization falls below the threshold for a predefined period of time, instance is stopped.
+3. AWS Lambda checks all instances with the `AutoShutdown` tag. An Amazon CloudWatch alarm triggered on low CPU utilization is added if one is absent 
+4. Amazon CloudWatch monitors instance CPU utilization 
+5. If CPU utilization falls below the threshold for a predefined period of time, instance is stopped
 
 ## Configuring EC2 Instances for automatic shutdown
 
 To configure your Amazon EC2 Instance to automatically hibernate, attach an AutoShutdown tag. If the solution has not been deployed to your account, follow [solution setup instructions](stop_idle_ec2s.md#deploying-the-solution) before proceeding. 
 
-1. Open the [Amazon EC2 console](https://console.aws.amazon.com/ec2).
+1. Open the [Amazon EC2 console](https://console.aws.amazon.com/ec2)
 2. In the navigation pane, choose **Instances**.
 3. Select an instance to tag by clicking the Instance ID
 4. Select **Tags** tab
@@ -32,9 +32,9 @@ To configure your Amazon EC2 Instance to automatically hibernate, attach an Auto
 
 ### A. Configure permissions with IAM
 
-1. Open the [IAM console](https://console.aws.amazon.com/iam).
-2. In the navigation pane, choose Policies.
-3. Select Create policy.
+1. Open the [IAM console](https://console.aws.amazon.com/iam)
+2. In the navigation pane, choose **Policies**
+3. Select **Create policy**.
 4. Switch to JSON view in the Policy editor. Paste the following
 
 ```JSON
@@ -57,33 +57,33 @@ To configure your Amazon EC2 Instance to automatically hibernate, attach an Auto
     ]
 }
 ```
-5. Name the policy AllowCreateAlarmOnMetricPolicy.
-6. In the navigation page, select Roles.
-7. Select Create role.
-8. For Trusted entity type, select AWS Service.
-9. For Use case, select Lambda.
-10. Select Next.
-11. In the Permissions policies list, search and select AllowCreateAlarmOnMetricPolicy.
-12. Select Next.
-13. Name the role AllowCreateAlarmOnMetricRole.
-14. Select Create role.
+5. Name the policy **AllowCreateAlarmOnMetricPolicy**
+6. In the navigation page, select **Roles**
+7. Select **Create role**
+8. For **Trusted entity type**, select **AWS Service**
+9. For **Use case**, select **Lambda**
+10. Select **Next**
+11. In the **Permissions policies** list, search and select **AllowCreateAlarmOnMetricPolicy**
+12. Select **Next** 
+13. Name the role **AllowCreateAlarmOnMetricRole**
+14. Select **Create role**
 
 > [!WARNING]
-> Check that a AWSServiceRoleForCloudWatchEvents service-linked role exists in your account. See documentation for instructions if the role is missing in IAM.
+> Check that a `AWSServiceRoleForCloudWatchEvents` service-linked role exists in your account. See [documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/UsingAlarmActions.html) for instructions if the role is missing in IAM.
 
-### B. Create the Lambda function
+### B. Create the AWS Lambda function
 
-1. Open the Functions page of the Lambda console.
-2. Choose Create function.
-3. Select Author from scratch.
-4. Name the function AttachCloudWatchAlarmFunction.
-5. For the Runtime, select Python 3.10 (or the latest Python version).
-6. For Architecture, choose arm64.
-7. Expand Change default execution role and select Use an existing role.
-8. Select AllowCreateAlarmOnMetricRole from the list of existing roles.
-9. Select Create function at the bottom of the page.
+1. Open the [Functions](https://console.aws.amazon.com/lambda/home#/functions) page of the AWS Lambda console
+2. Choose **Create function**
+3. Select **Author from scratch**
+4. Name the function **AttachCloudWatchAlarmFunction**
+5. For the **Runtime**, select **Python 3.12** (or the latest Python version).
+6. For **Architecture**, choose **arm64**
+7. Expand **Change default execution role** and select **Use an existing role**
+8. Select **AllowCreateAlarmOnMetricRole** from the list of existing roles
+9. Select **Create function** at the bottom of the page
 
-In the Lambda function page, scroll down to view the Code tab at the bottom. Copy the following code onto the editor for the lambda_function.py file.
+In the Lambda function page, scroll down to view the Code tab at the bottom. Copy the following code onto the editor for the `lambda_function.py` file.
 
 ```Python
 import boto3
@@ -139,13 +139,13 @@ def lambda_handler(event, context):
         cloudWatchClient.put_metric_alarm(AlarmName=AlarmName, AlarmDescription=AlarmDescription, ActionsEnabled=ActionsEnabled, AlarmActions=AlarmActions, MetricName=MetricName, Namespace=Namespace, Statistic=Statistic, Dimensions=Dimensions, Period=Period, EvaluationPeriods=EvaluationPeriods, DatapointsToAlarm=DatapointsToAlarm, Threshold=Threshold, ComparisonOperator=ComparisonOperator)
         print('Added alarm to instance ' + instance)
 ```
-10. On the function overview page, select Add trigger
-11. Select EventBridge (CloudWatch Events) as the source
-12. Pick Create a new rule for Rule
-13. Use TriggerAttachCloudWatchAlarmFunction for rule name
-14. Use Schedule expression for rule type
-15. Enter rate(1 hour)for Schedule expression
-16. Select Add
+10. On the function overview page, select **Add trigger**
+11. Select **EventBridge (CloudWatch Events** as the source
+12. Pick **Create a new rule** for Rule
+13. Use **TriggerAttachCloudWatchAlarmFunction** for rule name
+14. Use **Schedule expression** for rule type
+15. Enter `rate(1 hour)` for Schedule expression
+16. Select **Add**
 
 ## Appendix
 
