@@ -1,3 +1,8 @@
+# @author Sergey Menis w/ a starting template from ChatGPT
+# Sample code to update Amazon S3 Lifecycle configuration 
+# without overwriting existing rules.
+# Example uses put-bucket-lifecycle-configuration.
+
 import sys
 import boto3
 import json
